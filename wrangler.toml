@@ -1,0 +1,8 @@
+name = "timelines"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "timelines"
+database_id = "082e1277-6137-4aa9-a646-2607ffeadc48"
