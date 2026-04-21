@@ -4,6 +4,15 @@
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
+
+	type EventFormEcho = {
+		title?: string;
+		description?: string | null;
+		startDate?: string;
+		endDate?: string | null;
+		locationId?: number | null;
+	};
+	let f = $derived<EventFormEcho>((form ?? {}) as EventFormEcho);
 </script>
 
 <h2>Events</h2>
@@ -21,15 +30,15 @@
 
 <h3>New event</h3>
 <form method="POST" action="?/create">
-	<Input label="Title" name="title" required value={form?.title ?? ''} />
-	<Input label="Description" name="description" value={form?.description ?? ''} />
-	<Input label="Start date" name="start_date" type="date" required value={form?.startDate ?? ''} />
-	<Input label="End date" name="end_date" type="date" value={form?.endDate ?? ''} />
+	<Input label="Title" name="title" required value={f.title ?? ''} />
+	<Input label="Description" name="description" value={f.description ?? ''} />
+	<Input label="Start date" name="start_date" type="date" required value={f.startDate ?? ''} />
+	<Input label="End date" name="end_date" type="date" value={f.endDate ?? ''} />
 	<label for="location_id">Location</label>
 	<select id="location_id" name="location_id">
 		<option value="">— none —</option>
 		{#each data.locations as loc (loc.id)}
-			<option value={loc.id} selected={form?.locationId === loc.id}>{loc.name}</option>
+			<option value={loc.id} selected={f.locationId === loc.id}>{loc.name}</option>
 		{/each}
 	</select>
 	<Button label="Create" type="submit" variant="primary" />
