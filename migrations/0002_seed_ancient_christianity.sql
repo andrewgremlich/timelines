@@ -59,7 +59,22 @@ INSERT INTO event (title, description, start_date, end_date, location_id) VALUES
   ('Jerome''s Vulgate', 'Jerome, at the request of Pope Damasus, produces a Latin translation of the Bible from Hebrew and Greek sources that becomes the standard Western text for over a millennium.', '0382', '0405', (SELECT id FROM location WHERE name = 'Bethlehem')),
   ('City of God', 'Augustine writes De Civitate Dei after the sack of Rome in 410, defending Christianity against pagan accusations and contrasting the earthly and heavenly cities.', '0413', '0426', (SELECT id FROM location WHERE name = 'Hippo Regius')),
   ('Council of Ephesus', 'The third ecumenical council condemns Nestorianism and affirms the title Theotokos (God-bearer) for Mary.', '0431', NULL, (SELECT id FROM location WHERE name = 'Ephesus')),
-  ('Council of Chalcedon', 'The fourth ecumenical council defines the two natures of Christ, human and divine, united in one person without confusion or division.', '0451', NULL, (SELECT id FROM location WHERE name = 'Chalcedon'));
+  ('Council of Chalcedon', 'The fourth ecumenical council defines the two natures of Christ, human and divine, united in one person without confusion or division.', '0451', NULL, (SELECT id FROM location WHERE name = 'Chalcedon')),
+  ('Sermon on the Mount', 'Jesus delivers an extended body of teaching recorded in the Gospel of Matthew, including the Beatitudes and the Lord''s Prayer.', '0028', '0030', (SELECT id FROM location WHERE name = 'Jerusalem')),
+  ('Paul''s First Missionary Journey', 'Paul and Barnabas travel from Antioch through Cyprus and Asia Minor, founding churches in Pisidian Antioch, Iconium, Lystra, and Derbe.', '0046', '0048', (SELECT id FROM location WHERE name = 'Antioch')),
+  ('Paul''s Second Missionary Journey', 'Paul travels with Silas and later Timothy through Asia Minor and into Macedonia and Greece, founding churches in Philippi, Thessalonica, and Corinth.', '0049', '0052', (SELECT id FROM location WHERE name = 'Antioch')),
+  ('Paul''s Third Missionary Journey', 'Paul spends roughly three years in Ephesus and revisits churches in Macedonia and Greece before returning to Jerusalem.', '0053', '0057', (SELECT id FROM location WHERE name = 'Ephesus')),
+  ('Paul''s Roman Imprisonment', 'Paul is transported to Rome after appealing to Caesar and spends two years under house arrest, during which tradition places the writing of several epistles.', '0060', '0062', (SELECT id FROM location WHERE name = 'Rome')),
+  ('Origen''s Hexapla', 'Origen compiles a six-column synopsis of the Old Testament, comparing the Hebrew text with multiple Greek translations.', '0230', '0245', (SELECT id FROM location WHERE name = 'Caesarea Maritima')),
+  ('Tertullian''s Apology', 'Tertullian writes the Apologeticus, a Latin defense of Christianity addressed to Roman magistrates.', '0197', NULL, (SELECT id FROM location WHERE name = 'Carthage')),
+  ('Justin''s First Apology', 'Justin Martyr addresses his First Apology to Emperor Antoninus Pius, defending Christian belief and practice.', '0155', '0157', (SELECT id FROM location WHERE name = 'Rome')),
+  ('Eusebius'' Ecclesiastical History', 'Eusebius of Caesarea completes his history of the church from the apostles to his own day, the foundational work of ecclesiastical historiography.', '0313', '0325', (SELECT id FROM location WHERE name = 'Caesarea Maritima')),
+  ('Life of Antony Composed', 'Athanasius writes the Life of Antony from exile, popularizing monasticism in the Latin West.', '0356', '0362', (SELECT id FROM location WHERE name = 'Alexandria')),
+  ('Augustine Ordained Bishop', 'Augustine is ordained co-adjutor bishop of Hippo Regius and shortly after succeeds Valerius as sole bishop.', '0395', '0396', (SELECT id FROM location WHERE name = 'Hippo Regius')),
+  ('Augustine Writes Confessions', 'Augustine composes his autobiographical Confessions, addressed to God, recounting his youth, conversion, and mother''s death.', '0397', '0400', (SELECT id FROM location WHERE name = 'Hippo Regius')),
+  ('Sack of Rome by Alaric', 'Visigoths under Alaric sack Rome, prompting pagan accusations that Christianity had weakened the empire and motivating Augustine''s City of God.', '0410', NULL, (SELECT id FROM location WHERE name = 'Rome')),
+  ('Jerome Settles in Bethlehem', 'Jerome leaves Rome and settles in a monastery in Bethlehem, where he spends the rest of his life translating and commenting on Scripture.', '0386', NULL, (SELECT id FROM location WHERE name = 'Bethlehem')),
+  ('Great Persecution', 'Diocletian and his co-emperors issue edicts that destroy churches, burn scriptures, and require sacrifice, producing the most severe empire-wide persecution.', '0303', '0311', (SELECT id FROM location WHERE name = 'Rome'));
 
 INSERT INTO source (title, author, publication_date, url, citation, source_type) VALUES
   ('Gospel of Matthew', 'Unknown (attributed to Matthew the Apostle)', '0080', NULL, 'The Gospel According to Matthew. In The Holy Bible: New Revised Standard Version. National Council of Churches, 1989.', 'PRIMARY'),
@@ -103,7 +118,49 @@ INSERT INTO person_to_event (person_id, event_id, role) VALUES
   ((SELECT id FROM person WHERE name = 'Jerome'),                  (SELECT id FROM event WHERE title = 'Jerome''s Vulgate'),              'Translator'),
   ((SELECT id FROM person WHERE name = 'Augustine of Hippo'),      (SELECT id FROM event WHERE title = 'City of God'),                    'Author'),
   ((SELECT id FROM person WHERE name = 'Cyril of Alexandria'),     (SELECT id FROM event WHERE title = 'Council of Ephesus'),             'Presiding bishop'),
-  ((SELECT id FROM person WHERE name = 'Cyril of Alexandria'),     (SELECT id FROM event WHERE title = 'Council of Chalcedon'),           'Posthumous authority');
+  ((SELECT id FROM person WHERE name = 'Cyril of Alexandria'),     (SELECT id FROM event WHERE title = 'Council of Chalcedon'),           'Posthumous authority'),
+  -- Jesus additional events
+  ((SELECT id FROM person WHERE name = 'Jesus of Nazareth'),       (SELECT id FROM event WHERE title = 'Sermon on the Mount'),            'Teacher'),
+  ((SELECT id FROM person WHERE name = 'Simon Peter'),             (SELECT id FROM event WHERE title = 'Sermon on the Mount'),            'Disciple present'),
+  -- Peter additional events
+  ((SELECT id FROM person WHERE name = 'Simon Peter'),             (SELECT id FROM event WHERE title = 'Crucifixion of Jesus'),           'Denied Jesus'),
+  -- Paul additional events
+  ((SELECT id FROM person WHERE name = 'Paul of Tarsus'),          (SELECT id FROM event WHERE title = 'Paul''s First Missionary Journey'),  'Apostle'),
+  ((SELECT id FROM person WHERE name = 'Paul of Tarsus'),          (SELECT id FROM event WHERE title = 'Paul''s Second Missionary Journey'), 'Apostle'),
+  ((SELECT id FROM person WHERE name = 'Paul of Tarsus'),          (SELECT id FROM event WHERE title = 'Paul''s Third Missionary Journey'),  'Apostle'),
+  ((SELECT id FROM person WHERE name = 'Paul of Tarsus'),          (SELECT id FROM event WHERE title = 'Paul''s Roman Imprisonment'),        'Prisoner'),
+  ((SELECT id FROM person WHERE name = 'Paul of Tarsus'),          (SELECT id FROM event WHERE title = 'Pentecost'),                      'Not yet converted'),
+  ((SELECT id FROM person WHERE name = 'Nero'),                    (SELECT id FROM event WHERE title = 'Paul''s Roman Imprisonment'),        'Emperor'),
+  -- Tertullian
+  ((SELECT id FROM person WHERE name = 'Tertullian'),              (SELECT id FROM event WHERE title = 'Tertullian''s Apology'),          'Author'),
+  ((SELECT id FROM person WHERE name = 'Tertullian'),              (SELECT id FROM event WHERE title = 'Against Heresies'),               'Contemporary influenced'),
+  -- Justin
+  ((SELECT id FROM person WHERE name = 'Justin Martyr'),           (SELECT id FROM event WHERE title = 'Justin''s First Apology'),        'Author'),
+  -- Origen
+  ((SELECT id FROM person WHERE name = 'Origen'),                  (SELECT id FROM event WHERE title = 'Origen''s Hexapla'),              'Author'),
+  -- Eusebius
+  ((SELECT id FROM person WHERE name = 'Eusebius of Caesarea'),    (SELECT id FROM event WHERE title = 'Eusebius'' Ecclesiastical History'), 'Author'),
+  ((SELECT id FROM person WHERE name = 'Eusebius of Caesarea'),    (SELECT id FROM event WHERE title = 'Great Persecution'),              'Eyewitness chronicler'),
+  ((SELECT id FROM person WHERE name = 'Eusebius of Caesarea'),    (SELECT id FROM event WHERE title = 'Edict of Milan'),                 'Contemporary witness'),
+  -- Athanasius
+  ((SELECT id FROM person WHERE name = 'Athanasius of Alexandria'),(SELECT id FROM event WHERE title = 'Life of Antony Composed'),        'Author'),
+  ((SELECT id FROM person WHERE name = 'Athanasius of Alexandria'),(SELECT id FROM event WHERE title = 'Death of Constantine'),           'Contemporary bishop'),
+  -- Constantine
+  ((SELECT id FROM person WHERE name = 'Constantine I'),           (SELECT id FROM event WHERE title = 'Great Persecution'),              'Ended it'),
+  -- Jerome
+  ((SELECT id FROM person WHERE name = 'Jerome'),                  (SELECT id FROM event WHERE title = 'Jerome Settles in Bethlehem'),    'Subject'),
+  ((SELECT id FROM person WHERE name = 'Jerome'),                  (SELECT id FROM event WHERE title = 'Council of Constantinople'),      'Contemporary witness'),
+  -- Augustine
+  ((SELECT id FROM person WHERE name = 'Augustine of Hippo'),      (SELECT id FROM event WHERE title = 'Augustine Ordained Bishop'),      'Ordained'),
+  ((SELECT id FROM person WHERE name = 'Augustine of Hippo'),      (SELECT id FROM event WHERE title = 'Augustine Writes Confessions'),   'Author'),
+  ((SELECT id FROM person WHERE name = 'Augustine of Hippo'),      (SELECT id FROM event WHERE title = 'Sack of Rome by Alaric'),         'Contemporary respondent'),
+  ((SELECT id FROM person WHERE name = 'Jerome'),                  (SELECT id FROM event WHERE title = 'Sack of Rome by Alaric'),         'Contemporary witness'),
+  -- Decius + Great Persecution continuity
+  ((SELECT id FROM person WHERE name = 'Cyril of Alexandria'),     (SELECT id FROM event WHERE title = 'Great Persecution'),              'Childhood'),
+  -- Irenaeus additional
+  ((SELECT id FROM person WHERE name = 'Irenaeus of Lyon'),        (SELECT id FROM event WHERE title = 'Martyrdom of Polycarp'),          'Disciple of Polycarp'),
+  -- Polycarp additional
+  ((SELECT id FROM person WHERE name = 'Polycarp of Smyrna'),      (SELECT id FROM event WHERE title = 'Martyrdom of Ignatius'),          'Correspondent');
 
 -- source_to_event: which sources document which events
 INSERT INTO source_to_event (source_id, event_id) VALUES
@@ -125,4 +182,20 @@ INSERT INTO source_to_event (source_id, event_id) VALUES
   ((SELECT id FROM source WHERE title = 'Life of Antony'),           (SELECT id FROM event WHERE title = 'Exiles of Athanasius')),
   ((SELECT id FROM source WHERE title = 'Confessions'),              (SELECT id FROM event WHERE title = 'Conversion of Augustine')),
   ((SELECT id FROM source WHERE title = 'De Viris Illustribus'),     (SELECT id FROM event WHERE title = 'Jerome''s Vulgate')),
-  ((SELECT id FROM source WHERE title = 'City of God'),              (SELECT id FROM event WHERE title = 'City of God'));
+  ((SELECT id FROM source WHERE title = 'City of God'),              (SELECT id FROM event WHERE title = 'City of God')),
+  ((SELECT id FROM source WHERE title = 'Gospel of Matthew'),        (SELECT id FROM event WHERE title = 'Sermon on the Mount')),
+  ((SELECT id FROM source WHERE title = 'Acts of the Apostles'),     (SELECT id FROM event WHERE title = 'Paul''s First Missionary Journey')),
+  ((SELECT id FROM source WHERE title = 'Acts of the Apostles'),     (SELECT id FROM event WHERE title = 'Paul''s Second Missionary Journey')),
+  ((SELECT id FROM source WHERE title = 'Acts of the Apostles'),     (SELECT id FROM event WHERE title = 'Paul''s Third Missionary Journey')),
+  ((SELECT id FROM source WHERE title = 'Acts of the Apostles'),     (SELECT id FROM event WHERE title = 'Paul''s Roman Imprisonment')),
+  ((SELECT id FROM source WHERE title = 'Pauline Epistles'),         (SELECT id FROM event WHERE title = 'Paul''s Second Missionary Journey')),
+  ((SELECT id FROM source WHERE title = 'Pauline Epistles'),         (SELECT id FROM event WHERE title = 'Paul''s Third Missionary Journey')),
+  ((SELECT id FROM source WHERE title = 'Pauline Epistles'),         (SELECT id FROM event WHERE title = 'Paul''s Roman Imprisonment')),
+  ((SELECT id FROM source WHERE title = 'Ecclesiastical History'),   (SELECT id FROM event WHERE title = 'Eusebius'' Ecclesiastical History')),
+  ((SELECT id FROM source WHERE title = 'Ecclesiastical History'),   (SELECT id FROM event WHERE title = 'Origen''s Hexapla')),
+  ((SELECT id FROM source WHERE title = 'Ecclesiastical History'),   (SELECT id FROM event WHERE title = 'Great Persecution')),
+  ((SELECT id FROM source WHERE title = 'Life of Antony'),           (SELECT id FROM event WHERE title = 'Life of Antony Composed')),
+  ((SELECT id FROM source WHERE title = 'Confessions'),              (SELECT id FROM event WHERE title = 'Augustine Writes Confessions')),
+  ((SELECT id FROM source WHERE title = 'Confessions'),              (SELECT id FROM event WHERE title = 'Augustine Ordained Bishop')),
+  ((SELECT id FROM source WHERE title = 'City of God'),              (SELECT id FROM event WHERE title = 'Sack of Rome by Alaric')),
+  ((SELECT id FROM source WHERE title = 'De Viris Illustribus'),     (SELECT id FROM event WHERE title = 'Jerome Settles in Bethlehem'));

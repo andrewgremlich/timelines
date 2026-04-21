@@ -20,7 +20,7 @@
 	let liveMessage = $state<string>('');
 
 	let pageTitle = $derived(`${activePerson.name}’s Timeline`);
-	let currentPayload = $derived<FullPayload | undefined>(eventsById.get(currentEventId));
+	let isSoleEvent = $derived(eventOrder.length === 1);
 
 	let yScroller = $state<HTMLElement | null>(null);
 	const inflight = new Set<number>();
@@ -145,24 +145,33 @@
 		const target = yScroller?.querySelector<HTMLElement>(
 			`.event-row[data-event-id="${currentEventId}"]`
 		);
-		target?.scrollIntoView({ block: 'start', behavior: 'auto' });
+		if (target && yScroller) yScroller.scrollTop = target.offsetTop;
+	}
+
+	function scrollToRow(row: HTMLElement) {
+		if (!yScroller) return;
+		yScroller.scrollTo({ top: row.offsetTop, behavior: 'smooth' });
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
 		if (!yScroller) return;
+		const target = event.target as HTMLElement | null;
+		if (target && target.matches('input, textarea, select, [contenteditable="true"]')) return;
+
 		const rows = Array.from(yScroller.querySelectorAll<HTMLElement>('.event-row'));
 		const currentIndex = rows.findIndex((r) => Number(r.dataset.eventId) === currentEventId);
-		if (event.key === 'ArrowDown' || event.key === 'PageDown') {
+
+		if (event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === 'j') {
 			const next = rows[currentIndex + 1];
 			if (next) {
 				event.preventDefault();
-				next.scrollIntoView({ block: 'start', behavior: 'smooth' });
+				scrollToRow(next);
 			}
-		} else if (event.key === 'ArrowUp' || event.key === 'PageUp') {
+		} else if (event.key === 'ArrowUp' || event.key === 'PageUp' || event.key === 'k') {
 			const prev = rows[currentIndex - 1];
 			if (prev) {
 				event.preventDefault();
-				prev.scrollIntoView({ block: 'start', behavior: 'smooth' });
+				scrollToRow(prev);
 			}
 		}
 	}
@@ -265,6 +274,13 @@
 					</div>
 				{/if}
 
+				{#if isSoleEvent && eid === currentEventId}
+					<p class="sole-event-hint">
+						This is the only event recorded for {activePerson.name}.
+						<a href="/timelines">Show another person</a>.
+					</p>
+				{/if}
+
 				{#if payload.sources.length}
 					<aside class="sources" aria-label="Sources">
 						<h3>Sources</h3>
@@ -342,6 +358,7 @@
 		scroll-snap-stop: always;
 		display: grid;
 		grid-template-rows: auto auto auto;
+		grid-template-columns: minmax(0, 1fr);
 		gap: 1rem;
 		padding: 1.5rem 1rem;
 		border-bottom: 1px solid var(--slate-400);
@@ -367,6 +384,7 @@
 		display: flex;
 		gap: 1rem;
 		overflow-x: auto;
+		min-width: 0;
 		scroll-snap-type: x mandatory;
 		overscroll-behavior-x: contain;
 		touch-action: pan-x;
@@ -414,6 +432,19 @@
 	.person-card-role {
 		font-size: 0.875rem;
 		color: var(--slate-400);
+	}
+
+	.sole-event-hint {
+		margin: 0;
+		padding: 0.75rem 1rem;
+		border: 1px dashed var(--slate-400);
+		border-radius: 10px;
+		color: var(--slate-400);
+		font-size: 0.875rem;
+	}
+
+	.sole-event-hint a {
+		color: var(--rose-500);
 	}
 
 	.sources {
