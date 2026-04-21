@@ -7,14 +7,14 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import Nav from '$lib/components/nav.svelte';
 
-	let { children } = $props();
+	let { children, data } = $props();
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<Nav />
+<Nav user={data.user} />
 
 <main>
 	{@render children()}

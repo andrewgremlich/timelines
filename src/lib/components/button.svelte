@@ -3,14 +3,22 @@
 		label: string;
 		type?: 'button' | 'submit' | 'reset';
 		variant?: 'primary' | 'normal';
+		size?: 'small' | 'medium';
 		disabled?: boolean;
 		[key: string]: unknown;
 	}
 
-	let { label, type = 'button', variant = 'normal', disabled = false, ...rest }: Props = $props();
+	let {
+		label,
+		type = 'button',
+		variant = 'normal',
+		size = 'medium',
+		disabled = false,
+		...rest
+	}: Props = $props();
 </script>
 
-<button {type} {disabled} class={variant} {...rest}>{label}</button>
+<button {type} {disabled} class="{variant} {size}" {...rest}>{label}</button>
 
 <style>
 	button {
@@ -23,6 +31,14 @@
 		background-color: transparent;
 		color: var(--slate-100);
 		margin-top: 1rem;
+	}
+
+	button.small {
+		width: auto;
+		padding: 0.25rem 0.75rem;
+		font-size: 0.875rem;
+		margin-top: 0;
+		border-radius: 6px;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
