@@ -29,6 +29,22 @@
 	<Button label="Delete" type="submit" />
 </form>
 
+<section class="commentary">
+	<h3>Historian commentary</h3>
+	<ul>
+		{#each data.ratings as r (r.id)}
+			<li>
+				<a href="/admin/ratings/{r.id}">{r.historian_name}</a>
+				{#if r.confidence_score !== null}<small>confidence {r.confidence_score}</small>{/if}
+				{#if r.context}<p>{r.context}</p>{/if}
+			</li>
+		{:else}
+			<li>No commentary yet.</li>
+		{/each}
+	</ul>
+	<p><a href="/admin/ratings?source_id={data.source.id}">Add commentary →</a></p>
+</section>
+
 <p><a href="/admin/sources">← Back to sources</a></p>
 
 <style>

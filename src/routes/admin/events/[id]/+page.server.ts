@@ -21,11 +21,26 @@ export const load: PageServerLoad = async ({ params, platform }) => {
 
 	if (!event) throw error(404, 'Not found');
 
-	const locations = await db
-		.prepare('SELECT id, name FROM location ORDER BY name')
-		.all<{ id: number; name: string }>();
+	const [locations, ratings] = await Promise.all([
+		db.prepare('SELECT id, name FROM location ORDER BY name').all<{ id: number; name: string }>(),
+		db
+			.prepare(
+				`SELECT r.id, r.confidence_score, r.context, h.name AS historian_name
+				 FROM historian_rating r
+				 JOIN historian h ON h.id = r.historian_id
+				 WHERE r.event_id = ?
+				 ORDER BY r.rating_date DESC`
+			)
+			.bind(id)
+			.all<{
+				id: number;
+				confidence_score: number | null;
+				context: string | null;
+				historian_name: string;
+			}>()
+	]);
 
-	return { event, locations: locations.results };
+	return { event, locations: locations.results, ratings: ratings.results };
 };
 
 export const actions: Actions = {

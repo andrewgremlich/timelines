@@ -4,11 +4,11 @@
 
 <section>
 	<nav class="admin-nav">
-		<a href="/admin">Dashboard</a>
 		<a href="/admin/events">Events</a>
 		<a href="/admin/people">People</a>
 		<a href="/admin/sources">Sources</a>
 		<a href="/admin/historians">Historians</a>
+		<a href="/admin/ratings">Ratings</a>
 	</nav>
 	{@render children()}
 </section>

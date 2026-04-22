@@ -20,7 +20,24 @@ export const load: PageServerLoad = async ({ params, platform }) => {
 		}>();
 
 	if (!person) throw error(404, 'Not found');
-	return { person };
+
+	const ratings = await platform.env.DB
+		.prepare(
+			`SELECT r.id, r.confidence_score, r.context, h.name AS historian_name
+			 FROM historian_rating r
+			 JOIN historian h ON h.id = r.historian_id
+			 WHERE r.person_id = ?
+			 ORDER BY r.rating_date DESC`
+		)
+		.bind(id)
+		.all<{
+			id: number;
+			confidence_score: number | null;
+			context: string | null;
+			historian_name: string;
+		}>();
+
+	return { person, ratings: ratings.results };
 };
 
 export const actions: Actions = {
