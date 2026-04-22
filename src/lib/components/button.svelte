@@ -1,10 +1,13 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	interface Props {
-		label: string;
+		label?: string;
 		type?: 'button' | 'submit' | 'reset';
 		variant?: 'primary' | 'normal';
 		size?: 'small' | 'medium';
 		disabled?: boolean;
+		children?: Snippet;
 		[key: string]: unknown;
 	}
 
@@ -14,11 +17,14 @@
 		variant = 'normal',
 		size = 'medium',
 		disabled = false,
+		children,
 		...rest
 	}: Props = $props();
 </script>
 
-<button {type} {disabled} class="{variant} {size}" {...rest}>{label}</button>
+<button {type} {disabled} class="{variant} {size}" {...rest}>
+	{#if children}{@render children()}{:else}{label}{/if}
+</button>
 
 <style>
 	button {
@@ -30,7 +36,6 @@
 		border: var(--input-border);
 		background-color: transparent;
 		color: var(--slate-100);
-		margin-top: 1rem;
 	}
 
 	button.small {

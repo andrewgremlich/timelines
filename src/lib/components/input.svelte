@@ -1,7 +1,7 @@
 <script lang="ts">
 	interface Props {
-		label: string;
 		name: string;
+		label?: string;
 		type?: Exclude<HTMLInputElement['type'], 'submit'>;
 		id?: string;
 		value?: string;
@@ -26,9 +26,11 @@
 	const errorId = $derived(`${id}-error`);
 </script>
 
-<label for={id}>
-	{label}{#if required}<span aria-hidden="true"> *</span>{/if}
-</label>
+{#if label}
+	<label for={id}>
+		{label}{#if required}<span aria-hidden="true"> *</span>{/if}
+	</label>
+{/if}
 <input
 	{type}
 	{id}
